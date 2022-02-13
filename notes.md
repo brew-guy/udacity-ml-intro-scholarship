@@ -92,7 +92,7 @@ Combines results from multiple models (weak learners) e.g. by averaging, voting 
 
 **Bagging:** **B**ootstrap **agg**regat**ing**.
 
-**Boosting:** E.g. AdaBoost. Punishes more for misclassified values on each run of the weak learners. Ensemble learners together in a way that allows those that perform best in certain areas to create the largest impact.
+**Boosting:** E.g. AdaBoost (adaptive boosting). Punishes more for misclassified values on each run of the weak learners. Ensemble learners together in a way that allows those that perform best in certain areas to create the largest impact.
 
 **Bias:** When a model has high bias, this means that means it doesn't do a good job of bending to the data. An example of an algorithm that usually has high bias is linear regression. Even with completely different datasets, we end up with the same line fit to the data. When models have high bias, this is bad.
 
@@ -123,20 +123,38 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 ```
 
+## Classification metrics
+
 **Confusion matrix:**
 
 - Type 1 Error (Error of the first kind, or False Positive): In the medical example, this is when we misdiagnose a healthy patient as sick.
 - Type 2 Error (Error of the second kind, or False Negative): In the medical example, this is when we misdiagnose a sick patient as healthy.
 
-|          | Predicted positive | Predicted negative |
-| -------- | :----------------: | -----------------: |
-| Positive |   True positive    |     False negative |
-| Negative |   False positive   |      True negative |
+|                 | Predicted positive | Predicted negative |
+| --------------- | :----------------: | -----------------: |
+| Actual positive |   True positive    |     False negative |
+| Actual negative |   False positive   |      True negative |
 
-**Accuracy:** Tells how well the model classified correctly. Out of all the data points how many percent were correct.
+**Accuracy:** 0-1. Tells how well the model classified correctly. The ratio of correctly classified samples per total samples = $\frac{TP+TN}{TP+TN+FP+FN}$. Accuracy is not necessarily a good measure alone. If the data is skewed, the model with high accuracy can still miss all the samples it should be able to classify. E.g. credit card fraudulent/correct transaction samples that are distributed 0,01% / 99,99% will not catch fraudulent samples even with an accuracy of 99%.
 
-**Precision:**
+**Precision:** 0-1. What proportion of positive predictions was actually correct? Predicted positive ratio = $\frac{TP}{TP+FP}$. With high precision, the model will not yield any false positives. Good for spam classification where we can live with a few spam messages slipping into the inbox but not with non-spam being lost in the spam folder.
 
-**Recall:**
+**Recall (sensitivity):** 0-1. What proportion of actual positives was predicted correctly? Actual positive ratio = $\frac{TP}{TP+FN}$. With high recall, the model will not yield any false negatives. Good for medical models where it's just inconvenient for healthy patients to be incorrectly classified as ill but potentially disastrous for ill patients to be sent home due to being classified as healthy.
+
+**Specificity:** Actual negative ratio = $\frac{TN}{TN+FP}$.
+
+**F1 Score:** 0-1. The _Harmonic Mean_ of the Precision and Recall scores. $F_1 = \frac{2*Precision*Recall}{Precision+Recall}$ which is always lower than the arithmetic mean (average), and only close to the arithmetic mean when the two variables are close to being equal. So if Precision or Recall is particularly low, the F1 Score raises a flag as it will also be lower than the arithmetic average.
+
+**F-beta Score:** 0-1. Skewers the score more towards Precision or Recall. The smaller the beta, the more towards Precision. F0.25 score is skewered more towards Precision. F2 score puts more weight on Recall. $F_\beta = (1 + \beta^2)\frac{Precision*Recall}{\beta^2*Precision+Recall}$
+
+**ROC Curve:** Receiver Operating Characteristic Curve. An Area Under Curve (AUC) relation to how well a model is able to split a sample when plotting the (FP-rate, TP-rate) in a plot. $FPR=\frac{FP}{FP+TN}$, $TPR=\frac{TP}{TP+FN}$. A perfect split will yield AUC=1, a good split AUG=0.8, random/bad split AUC=0.5. _Does the ROC Curve indicate easily splittable data or is it more an indicator of whether the model is good?_
+
+## Regression metrics
+
+**Mean Absolute Error:** The average of absolute values of the distance from points to the fit model. Useful metric to optimize on when the value you are trying to predict follows a skewed distribution. Optimizing on an absolute value is particularly helpful in these cases because outliers will not influence models attempting to optimize on this metric as much as if you use the mean squared error. The optimal value for this technique is the median value. When you optimize for the R2 value of the mean squared error, the optimal value is actually the mean.
+
+**Mean Squared Error:** Same as Mean Absolute Error but with average of squared distances.
+
+**R2 Score:** 0 (bad) to 1 (good model). Uses the simplest possible model that fits the data (e.g. an average line through points), finds the ratio between the actual model and simple model to calulate R2. $R2=1-\frac{Mean\:Squared\:Error}{Simple\:Model\:Error}$
 
 # Lesson 9 - Training and Tuning
