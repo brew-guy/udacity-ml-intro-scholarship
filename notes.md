@@ -158,3 +158,15 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
 **R2 Score:** 0 (bad) to 1 (good model). Uses the simplest possible model that fits the data (e.g. an average line through points), finds the ratio between the actual model and simple model to calulate R2. $R2=1-\frac{Mean\:Squared\:Error}{Simple\:Model\:Error}$
 
 # Lesson 9 - Training and Tuning
+
+**Underfitting:** When oversimplifying a problem. Characteristic: Doesn't do well in neither training set nor test set. Error due to bias.
+
+**Overfitting:** When overcomplicating a problem. Characteristic: Does well in the training set but tends to memorize it instead of learning the characteristics of it and as a result does bad on the test set. Error due to variance.
+
+**Cross Validation:** To avoid using the _test set_ during hyperparameter tuning (STRICTLY FORBIDDEN), a _cross validation set_ should be created for that purpose.
+
+**K-Fold Cross Validation:** Method to reuse data for validation without breaking the rule of not using test data. Randomizes the data and breaks it into (K number of) buckets. Training and testing is then performed on different buckets in a loop and the results averaged to get the final model.
+
+**Learning Curves:** Plot of training error (TE) and cross-validation error (CVE) as function of polynomial degree can reveal the best fit. The TE and CVE curves will converge at a high error rate for an underfitting model. The curves will not converge for an overfitting model. The curves will converge at a low error rate for a good model.
+
+**Grid Search:** A method to find the optimal hyperparameter(s) of a model. If a model takes more hyperparameters, they can be tested pair-wise and lined up in a table, i.e. doing the Grid Search. For numerical hyperparameters, it's best to increment in orders of 10 (0.1 - 1 - 10 - 100...). The model is trained, cross-validated and the model with the best F1 score is picked and tested.
